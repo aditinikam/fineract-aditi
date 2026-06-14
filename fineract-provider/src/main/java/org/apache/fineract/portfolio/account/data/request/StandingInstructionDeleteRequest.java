@@ -18,10 +18,9 @@
  */
 package org.apache.fineract.portfolio.account.data.request;
 
-import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.Hidden;
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,41 +30,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StandingInstructionCreationRequest implements Serializable {
+public class StandingInstructionDeleteRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long fromOfficeId;
-    private Long fromClientId;
-    @NotNull
-    private Long fromAccountId;
-    @NotNull
-    private Integer fromAccountType;
-    private Long toOfficeId;
-    private Long toClientId;
-    @NotNull
-    private Long toAccountId;
-    @NotNull
-    private Integer toAccountType;
-    @NotNull
-    private Integer transferType;
-    @NotNull
-    private String name;
-    @NotNull
-    private Integer priority;
-    @NotNull
-    private Integer status;
-    @NotNull
-    private Integer instructionType;
-    private BigDecimal amount;
-    private Integer recurrenceType;
-    private Integer recurrenceFrequency;
-    private Integer recurrenceInterval;
-    private String validFrom;
-    private String validTill;
-    private String recurrenceOnMonthDay;
-    private String locale;
-    private String dateFormat;
-    private String monthDayFormat;
+    @Hidden
+    private Long id;
 }

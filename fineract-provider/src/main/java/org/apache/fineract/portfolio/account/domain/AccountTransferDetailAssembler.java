@@ -98,6 +98,29 @@ public class AccountTransferDetailAssembler {
         return assembleLoanToSavingsTransfer(command, fromLoanAccount, toSavingsAccount);
     }
 
+    // JsonCommand-free, strongly typed overloads used by the new command-dispatcher write path.
+
+    public AccountTransferDetails assembleSavingsToSavingsTransfer(final Long fromAccountId, final Long toAccountId,
+            final Integer transferType) {
+        final SavingsAccount fromSavingsAccount = this.savingsAccountAssembler.assembleFrom(fromAccountId, false);
+        final SavingsAccount toSavingsAccount = this.savingsAccountAssembler.assembleFrom(toAccountId, false);
+        return assembleSavingsToSavingsTransfer(fromSavingsAccount, toSavingsAccount, transferType);
+    }
+
+    public AccountTransferDetails assembleSavingsToLoanTransfer(final Long fromAccountId, final Long toAccountId,
+            final Integer transferType) {
+        final SavingsAccount fromSavingsAccount = this.savingsAccountAssembler.assembleFrom(fromAccountId, false);
+        final Loan toLoanAccount = this.loanAccountAssembler.assembleFrom(toAccountId);
+        return assembleSavingsToLoanTransfer(fromSavingsAccount, toLoanAccount, transferType);
+    }
+
+    public AccountTransferDetails assembleLoanToSavingsTransfer(final Long fromAccountId, final Long toAccountId,
+            final Integer transferType) {
+        final Loan fromLoanAccount = this.loanAccountAssembler.assembleFrom(fromAccountId);
+        final SavingsAccount toSavingsAccount = this.savingsAccountAssembler.assembleFrom(toAccountId, false);
+        return assembleLoanToSavingsTransfer(fromLoanAccount, toSavingsAccount, transferType);
+    }
+
     public AccountTransferDetails assembleSavingsToSavingsTransfer(final JsonCommand command, final SavingsAccount fromSavingsAccount,
             final SavingsAccount toSavingsAccount) {
 

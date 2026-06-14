@@ -18,30 +18,38 @@
  */
 package org.apache.fineract.portfolio.account.data.request;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class StandingInstructionUpdatesRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String amount;
-    private String validTill;
-    private String dateFormat;
-    private String validFrom;
-    private String locale;
-    private String priority;
-    private String recurrenceType;
-    private String recurrenceInterval;
-    private String instructionType;
-    private String recurrenceFrequency;
-    private String recurrenceOnMonthDay;
+    @Hidden
+    private Long id;
+    private BigDecimal amount;
+    private Integer priority;
+    private Integer status;
+    private Integer instructionType;
+    private Integer recurrenceType;
+    private Integer recurrenceFrequency;
+    private Integer recurrenceInterval;
     private String name;
+    private String validFrom;
+    private String validTill;
+    private String recurrenceOnMonthDay;
+    private String locale;
+    private String dateFormat;
     private String monthDayFormat;
-    private String status;
 }

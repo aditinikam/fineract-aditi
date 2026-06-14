@@ -229,6 +229,88 @@ public class AccountTransferStandingInstruction extends AbstractPersistableCusto
         return actualChanges;
     }
 
+    /**
+     * JsonCommand-free, strongly typed partial update used by the new command-dispatcher write path. A {@code null}
+     * argument means the corresponding field was not provided and is left unchanged.
+     */
+    public Map<String, Object> update(final BigDecimal amount, final LocalDate validFrom, final LocalDate validTill, final Integer status,
+            final Integer priority, final Integer instructionType, final Integer recurrenceType, final Integer recurrenceFrequency,
+            final Integer recurrenceInterval, final MonthDay recurrenceOnMonthDay) {
+        final Map<String, Object> actualChanges = new HashMap<>();
+
+        final List<ApiParameterError> dataValidationErrors = new ArrayList<>();
+        final DataValidatorBuilder baseDataValidator = new DataValidatorBuilder(dataValidationErrors)
+                .resource(STANDING_INSTRUCTION_RESOURCE_NAME);
+
+        if (StandingInstructionStatus.fromInt(this.status).isDeleted()) {
+            baseDataValidator.reset().parameter(statusParamName).failWithCode("can.not.modify.once.deleted");
+        }
+
+        if (validFrom != null && !validFrom.equals(this.validFrom)) {
+            this.validFrom = validFrom;
+            actualChanges.put(validFromParamName, validFrom);
+        }
+
+        if (validTill != null && !validTill.equals(this.validTill)) {
+            this.validTill = validTill;
+            actualChanges.put(validTillParamName, validTill);
+        }
+
+        if (amount != null && (this.amount == null || this.amount.compareTo(amount) != 0)) {
+            this.amount = amount;
+            actualChanges.put(amountParamName, amount);
+        }
+
+        if (status != null && !status.equals(this.status)) {
+            this.status = status;
+            actualChanges.put(statusParamName, status);
+        }
+
+        if (priority != null && !priority.equals(this.priority)) {
+            this.priority = priority;
+            actualChanges.put(priorityParamName, priority);
+        }
+
+        if (instructionType != null && !instructionType.equals(this.instructionType)) {
+            this.instructionType = instructionType;
+            actualChanges.put(instructionTypeParamName, instructionType);
+        }
+
+        if (recurrenceType != null && !recurrenceType.equals(this.recurrenceType)) {
+            this.recurrenceType = recurrenceType;
+            actualChanges.put(recurrenceTypeParamName, recurrenceType);
+        }
+
+        if (recurrenceFrequency != null && !recurrenceFrequency.equals(this.recurrenceFrequency)) {
+            this.recurrenceFrequency = recurrenceFrequency;
+            actualChanges.put(recurrenceFrequencyParamName, recurrenceFrequency);
+        }
+
+        if (recurrenceOnMonthDay != null) {
+            final Integer dayOfMonthValue = recurrenceOnMonthDay.getDayOfMonth();
+            if (!dayOfMonthValue.equals(this.recurrenceOnDay)) {
+                this.recurrenceOnDay = dayOfMonthValue;
+                actualChanges.put(recurrenceOnMonthDayParamName, recurrenceOnMonthDay.toString());
+            }
+            final Integer monthOfYear = recurrenceOnMonthDay.getMonthValue();
+            if (!monthOfYear.equals(this.recurrenceOnMonth)) {
+                this.recurrenceOnMonth = monthOfYear;
+                actualChanges.put(recurrenceOnMonthDayParamName, recurrenceOnMonthDay.toString());
+            }
+        }
+
+        if (recurrenceInterval != null && !recurrenceInterval.equals(this.recurrenceInterval)) {
+            this.recurrenceInterval = recurrenceInterval;
+            actualChanges.put(recurrenceIntervalParamName, recurrenceInterval);
+        }
+
+        validateDependencies(baseDataValidator);
+        if (!dataValidationErrors.isEmpty()) {
+            throw new PlatformApiDataValidationException(dataValidationErrors);
+        }
+        return actualChanges;
+    }
+
     private void validateDependencies(final DataValidatorBuilder baseDataValidator) {
 
         if (this.validTill != null && this.validFrom != null) {
