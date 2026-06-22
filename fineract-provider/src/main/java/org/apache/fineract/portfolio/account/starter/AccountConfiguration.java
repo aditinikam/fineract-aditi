@@ -27,12 +27,10 @@ import org.apache.fineract.infrastructure.security.service.SqlValidator;
 import org.apache.fineract.infrastructure.security.utils.ColumnValidator;
 import org.apache.fineract.organisation.office.service.OfficeReadPlatformService;
 import org.apache.fineract.portfolio.account.data.AccountTransfersDataValidator;
-import org.apache.fineract.portfolio.account.data.StandingInstructionDataValidator;
 import org.apache.fineract.portfolio.account.domain.AccountTransferAssembler;
 import org.apache.fineract.portfolio.account.domain.AccountTransferDetailAssembler;
 import org.apache.fineract.portfolio.account.domain.AccountTransferDetailRepository;
 import org.apache.fineract.portfolio.account.domain.AccountTransferRepository;
-import org.apache.fineract.portfolio.account.domain.StandingInstructionAssembler;
 import org.apache.fineract.portfolio.account.domain.StandingInstructionRepository;
 import org.apache.fineract.portfolio.account.mapper.AccountTransfersMapper;
 import org.apache.fineract.portfolio.account.service.AccountAssociationsReadPlatformService;
@@ -47,8 +45,6 @@ import org.apache.fineract.portfolio.account.service.StandingInstructionHistoryR
 import org.apache.fineract.portfolio.account.service.StandingInstructionHistoryReadServiceImpl;
 import org.apache.fineract.portfolio.account.service.StandingInstructionReadService;
 import org.apache.fineract.portfolio.account.service.StandingInstructionReadServiceImpl;
-import org.apache.fineract.portfolio.account.service.StandingInstructionWritePlatformService;
-import org.apache.fineract.portfolio.account.service.StandingInstructionWritePlatformServiceImpl;
 import org.apache.fineract.portfolio.account.service.StandingInstructionWriteService;
 import org.apache.fineract.portfolio.account.service.StandingInstructionWriteServiceImpl;
 import org.apache.fineract.portfolio.client.service.ClientReadPlatformService;
@@ -125,15 +121,6 @@ public class AccountConfiguration {
             DatabaseSpecificSQLGenerator sqlGenerator, PaginationHelper paginationHelper) {
         return new StandingInstructionReadServiceImpl(jdbcTemplate, clientReadPlatformService, officeReadPlatformService,
                 portfolioAccountReadPlatformService, dropdownReadPlatformService, columnValidator, sqlGenerator, paginationHelper);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(StandingInstructionWritePlatformService.class)
-    public StandingInstructionWritePlatformService standingInstructionWritePlatformService(
-            StandingInstructionDataValidator standingInstructionDataValidator, StandingInstructionAssembler standingInstructionAssembler,
-            AccountTransferDetailRepository accountTransferDetailRepository, StandingInstructionRepository standingInstructionRepository) {
-        return new StandingInstructionWritePlatformServiceImpl(standingInstructionDataValidator, standingInstructionAssembler,
-                accountTransferDetailRepository, standingInstructionRepository);
     }
 
     @Bean
